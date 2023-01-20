@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CryptoCourses</title>
+        <link href="./main.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="input_wrap">
+                <select class="currencies_select" id="from_cur">
+                    <option value="bitcoin">BTC</option>
+                    <option value="ethereum">ETH</option>
+                    <option value="binancecoin">BNB</option>
+                </select>
+                <input type="number" id="from_val" />
+            </div>
+            <div class="price">$<span id="usd_price">0</span></div>
+        </div>
+    </body>
+    <script src="script.js"></script>
+</html>

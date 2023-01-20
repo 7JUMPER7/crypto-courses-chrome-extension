@@ -1,0 +1,15 @@
+{
+    "name": "CryptoCourses",
+    "version": "0.1.0",
+    "manifest_version": 3,
+    "description": "View course of cryptocurrencies",
+    "action": {
+      "default_icon": {
+        "16": "assets/icon_16.png",
+        "48": "assets/icon_48.png",
+        "128": "assets/icon_128.png"
+      },
+      "default_title": "CryptoCourses",
+      "default_popup": "popup.html"
+    }
+  }
