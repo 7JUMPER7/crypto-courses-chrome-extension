@@ -1,0 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap");
+
+:root {
+    --BG: #222222;
+    --grayRGB: 121, 121, 121;
+    --primary: #0082c7;
+}
+
+*,
+*::after,
+*::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* background-color: white; */
+    background-color: var(--BG);
+    min-width: 340px;
+    max-width: 340px;
+    min-height: 500px;
+    padding: 0 24px;
+    font-family: "Rubik", sans-serif;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.part {
+    margin-top: 20px;
+}
+
+.part h3 {
+    color: white;
+    font-weight: 600;
+}
+
+.input_wrap {
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.input_wrap input[type="number"] {
+    width: 100%;
+    padding: 7px 10px;
+    outline: none;
+    border: 1px solid #c8c8c8;
+    border-radius: 7px;
+    font-size: 18px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 600;
+    color: white;
+    background-color: transparent;
+    box-shadow: 1px 1px 5px 0 black;
+    transition: 0.3s border;
+}
+.input_wrap input[type="number"]::selection {
+    background: rgba(0, 119, 182, 0.3);
+}
+.input_wrap input[type="number"]:focus {
+    border-color: var(--primary);
+}
+.input_wrap input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    opacity: 0;
+}
+
+.input_wrap .select_container {
+    min-width: 110px;
+    padding: 5px 10px;
+    outline: none;
+    border: none;
+    border: 1px solid #c8c8c8;
+    border-radius: 7px;
+    font-size: 16px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 600;
+    color: white;
+    background-color: transparent;
+    box-shadow: 1px 1px 5px 0 black;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.input_wrap .select_container:hover {
+    cursor: pointer;
+}
+.input_wrap .select_container svg {
+    transition: 0.3s all;
+}
+.input_wrap .select_container.opened svg {
+    transform: rotate(180deg);
+}
+.input_wrap .select_container .selected_token {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.input_wrap .select_container .selected_token img {
+    height: 20px;
+}
+
+.dropdown_container {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(var(--grayRGB), 0.3);
+    padding: 16px;
+    border: 1px solid #c8c8c8;
+    border-radius: 7px;
+    color: white;
+    box-shadow: 1px 1px 5px 0 black;
+    backdrop-filter: blur(10px);
+    transition: 0.3s all;
+
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 5;
+}
+.dropdown_container.visible {
+    display: flex;
+}
+.dropdown_container p {
+    font-size: 11px;
+    color: #b3b3b3;
+}
+.dropdown_container .token {
+    color: white;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 7px;
+    transition: 0.2s all;
+
+    display: flex;
+    align-items: center;
+}
+.dropdown_container .token:hover {
+    background-color: var(--primary);
+    cursor: pointer;
+}
+.dropdown_container .token img {
+    height: 20px;
+}
+.dropdown_container .token span {
+    margin-left: 7px;
+}
