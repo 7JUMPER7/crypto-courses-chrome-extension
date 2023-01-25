@@ -1,15 +1,22 @@
 {
     "name": "CryptoCourses",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "manifest_version": 3,
-    "description": "View course of cryptocurrencies",
+    "description": "A simple crypto converter",
     "action": {
-      "default_icon": {
-        "16": "assets/icon_16.png",
-        "48": "assets/icon_48.png",
-        "128": "assets/icon_128.png"
-      },
-      "default_title": "CryptoCourses",
-      "default_popup": "src/popup.html"
+        "default_icon": {
+            "16": "assets/icons/16.png",
+            "36": "assets/icons/36.png",
+            "48": "assets/icons/48.png",
+            "128": "assets/icons/128.png"
+        },
+        "default_title": "CryptoCourses",
+        "default_popup": "src/popup.html"
+    },
+    "icons": {
+        "16": "assets/icons/16.png",
+        "36": "assets/icons/36.png",
+        "48": "assets/icons/48.png",
+        "128": "assets/icons/128.png"
     }
-  }
+}
