@@ -46,14 +46,12 @@ let selectedToCurr = currencies.fiat[0];
 
 // Fetch request to coingecko
 const getCourse = async (coinId, vsCurr) => {
-    console.log(coinId, vsCurr);
     let data = await fetch(ENDPOINT + "/simple/price?ids=" + coinId + "&vs_currencies=" + vsCurr, {
         headers: {
             accept: "application/json",
         },
     });
     data = await data.json();
-    console.log(data);
     return data[coinId]?.[vsCurr];
 };
 
@@ -64,12 +62,21 @@ const calculatePrice = async () => {
 
     if (fromAmount !== "" && fromAmount !== 0) {
         const fromCurr = selectedFromCurr.id ?? selectedFromCurr.name.toLowerCase();
-        const course = await getCourse(fromCurr, selectedToCurr.name.toLowerCase());
 
-        if (course) {
-            toAmount.value = (course * fromAmount).toFixed(3);
+        if(fromCurr === 'uah') {
+            const course = await getCourse(selectedToCurr.id ?? selectedToCurr.name.toLowerCase(), fromCurr);
+            if (course) {
+                toAmount.value = (fromAmount / course).toFixed(3);
+            } else {
+                toAmount.value = 0;
+            }
         } else {
-            toAmount.value = 0;
+            course = await getCourse(fromCurr, selectedToCurr.name.toLowerCase());
+            if (course) {
+                toAmount.value = (course * fromAmount).toFixed(3);
+            } else {
+                toAmount.value = 0;
+            }
         }
     } else {
         toAmount.value = 0;
@@ -84,6 +91,23 @@ const handleChange = () => {
     changeTimeout = setTimeout(calculatePrice, 500);
 };
 
+const handleDropdownClickToFreeSpace = (e) => {
+    let paths = e.path;
+    if (!paths) {
+        paths = e.composedPath ? e.composedPath() : null;
+    }
+
+    if (paths) {
+        for (let path of paths) {
+            console.dir(path);
+            if (path.localName === "body" || path.classList.contains("dropdown_container")) {
+                handleDropdown();
+                break;
+            }
+        }
+    }
+};
+
 // Handle dropdown open/close
 const handleDropdown = (rootId) => {
     const dropdown = document.getElementById("dropdown_container");
@@ -93,45 +117,67 @@ const handleDropdown = (rootId) => {
     const root = document.getElementById(selectedSelect);
 
     if (dropdown && root) {
-        if (dropdown.classList.contains("visible")) {
-            dropdown.classList.remove("visible");
-            root.classList.remove("opened");
-        } else {
+        // To open
+        if (!dropdown.classList.contains("displayed")) {
             dropdown.style.top = root.offsetTop + root.offsetHeight + 5 + "px";
             root.classList.add("opened");
-            dropdown.classList.add("visible");
+            dropdown.classList.add("displayed");
+            setTimeout(() => {
+                dropdown.classList.add("visible");
+            }, 10);
 
             if (rootId === "from_cur") {
                 isSelectedFrom = true;
             } else {
                 isSelectedFrom = false;
-                console.log("Change var to false");
             }
+
+            document.addEventListener("click", handleDropdownClickToFreeSpace, {
+                once: true,
+                capture: true,
+            });
+            // To close
+        } else {
+            root.classList.remove("opened");
+            dropdown.classList.remove("visible");
+            setTimeout(() => {
+                dropdown.classList.remove("displayed");
+            }, 300);
         }
-    } else {
-        dropdown.classList.remove("visible");
-        root.classList.remove("opened");
     }
 };
 
+// Change FROM curr
+const changeFromCurr = (curr) => {
+    selectedFromCurr = curr;
+    const fromSelect = document.getElementById("from_cur");
+    const fromImage = fromSelect.querySelector("img");
+    fromImage.src = CURRENCIES_ASSETS + selectedFromCurr.image;
+    const fromName = fromSelect.querySelector("span");
+    fromName.innerText = selectedFromCurr.name;
+};
+// Change TO curr
+const changeToCurr = (curr) => {
+    selectedToCurr = curr;
+    const toSelect = document.getElementById("to_cur");
+    const toImage = toSelect.querySelector("img");
+    toImage.src = CURRENCIES_ASSETS + selectedToCurr.image;
+    const toName = toSelect.querySelector("span");
+    toName.innerText = selectedToCurr.name;
+};
 // Handle select currency in dropdown
 const handleDropdownSelect = (curr) => {
     if (isSelectedFrom === true) {
-        selectedFromCurr = curr;
-        const fromSelect = document.getElementById("from_cur");
-        const fromImage = fromSelect.querySelector("img");
-        fromImage.src = CURRENCIES_ASSETS + selectedFromCurr.image;
-        const fromName = fromSelect.querySelector("span");
-        fromName.innerText = selectedFromCurr.name;
+        if (selectedToCurr.name === curr.name) {
+            changeToCurr(selectedFromCurr);
+        }
+        changeFromCurr(curr);
     } else {
-        selectedToCurr = curr;
-        const toSelect = document.getElementById("to_cur");
-        const toImage = toSelect.querySelector("img");
-        toImage.src = CURRENCIES_ASSETS + selectedToCurr.image;
-        const toName = toSelect.querySelector("span");
-        toName.innerText = selectedToCurr.name;
+        if(selectedFromCurr.name === curr.name) {
+            changeFromCurr(selectedToCurr);
+        }
+        changeToCurr(curr);
     }
-    handleDropdown();
     calculatePrice();
 };
 
@@ -189,14 +235,8 @@ window.addEventListener("DOMContentLoaded", () => {
         fiat.appendChild(newToken);
     });
 
-    // Setting dropdown handlers
-
+    // Set change value handler
     document.getElementById("from_val").addEventListener("input", handleChange);
-
     document.getElementById("from_cur").addEventListener("click", () => handleDropdown("from_cur"));
     document.getElementById("to_cur").addEventListener("click", () => handleDropdown("to_cur"));
-
-    setTimeout(() => {
-        console.log(isSelectedFrom);
-    }, 10000);
 });
